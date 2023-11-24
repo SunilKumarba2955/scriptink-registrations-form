@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "//sunilkumarba2955.github.io/scriptink-registrations-form/static/css/main.39d13f40.css",
+    "main.js": "//sunilkumarba2955.github.io/scriptink-registrations-form/static/js/main.0ee128b0.js",
+    "index.html": "//sunilkumarba2955.github.io/scriptink-registrations-form/index.html",
+    "main.39d13f40.css.map": "//sunilkumarba2955.github.io/scriptink-registrations-form/static/css/main.39d13f40.css.map",
+    "main.0ee128b0.js.map": "//sunilkumarba2955.github.io/scriptink-registrations-form/static/js/main.0ee128b0.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.39d13f40.css",
+    "static/js/main.0ee128b0.js"
+  ]
+}
