@@ -17,8 +17,6 @@ function App() {
   const [registered, setRegistered] = useState(true);
   const [inside, setInside] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [dupEmail, setDupEmail] = useState(false);
-  const [dupNumber, setDupNumber] = useState(false);
 
 
   const handleSubmit = async (e) => {
@@ -27,25 +25,10 @@ function App() {
     if (referral === 'SUNIL') {
       setAmount(amount - 49);
     }
-    const formData = {
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      college,
-      usn,
-      year,
-      branch,
-      referral,
-      amount,
-      registered,
-      inside
-    }
-    console.log(formData);
+    const formData = { firstName, lastName, email, phoneNumber, college, usn, year, branch, referral, amount, registered, inside }
     const ph = '+91' + String(phoneNumber);
-    console.log(ph);
     try {
-      await setDoc(doc(collection(db, "registrations"), ph), { formData });
+      await setDoc(doc(collection(db, "registrations"), ph), formData );
       alert('Form submitted successfully');
       setAmount(50);
       setBranch('');
@@ -65,61 +48,68 @@ function App() {
     }
   }
 
-
-  const checkDuplicateEmail = async (email) => {
-    // Check if email exists
-    if (email) {
-      const emailSnapshot = await getDocs(query(collection(db, "registrations"), where("email", "==", email)));
-      return !emailSnapshot.empty;
-    }
-  
-    return false;
-  };
-  
-  const checkDuplicateNumber = async (phoneNumber) => {
-    // Check if phone number exists
-    if (phoneNumber) {
-      const q = query(collection(db, "registrations"), where("phoneNumber", "==", phoneNumber));
-      const phoneSnapshot = await getDocs(q);
-      console.log(phoneSnapshot);
-      return !phoneSnapshot.empty;
-    }
-  
-    return false;
-  };
-  
-
   useEffect(() => {
     if (referral === 'SUNIL') {
-      setAmount(amount-49);
+      setAmount(amount - 49);
     } else {
       setAmount(50);
     }
   }, [referral]);
 
-  
+
+  // Validation part
+  const [dataList, setDataList] = useState([]);
+  const [dupEmail, setDupEmail] = useState(false);
+  const [dupNumber, setDupNumber] = useState(false);
   useEffect(() => {
-    console.log('Function is called Number');
-    const checkDuplicate = async () => {
-      const isDuplicateNumber = await checkDuplicateNumber(phoneNumber);
-      setDupNumber(isDuplicateNumber);
-      console.log(dupNumber);
+    const fetchData = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'registrations'));
+        const data = [];
+        querySnapshot.forEach((doc) => {
+          data.push({ id: doc.id, ...doc.data() });
+        });
+        setDataList(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     };
-  
-    checkDuplicate();
-  }, [phoneNumber]);
+
+    fetchData();
+    
+  }, []);
 
   useEffect(() => {
-    console.log('Function is called email');
-    const checkDuplicate = async () => {
-      const isDuplicateEmail = await checkDuplicateEmail(email);
-      setDupEmail(isDuplicateEmail);
-      console.log(dupEmail);
+    
+
+    for(let i=0; i<dataList.length; i++) {
+      if(email===dataList[i].email) {
+        setDupEmail(true);
+        return;
+      } else {
+        setDupEmail(false);
+      }
+
     };
+
+  }, [dataList, email]);
+
+  useEffect(() => {
+    
+    for(let i=0; i<dataList.length; i++) {
+
+      if(phoneNumber===dataList[i].phoneNumber) {
+        setDupNumber(true);
+        return;
+      } else {
+        setDupNumber(false);
+      }
+
+    };
+
+  }, [dataList, phoneNumber]);
   
-    checkDuplicate();
-  }, [email]);
-  
+
 
   return (
     <div className="App">
@@ -139,15 +129,15 @@ function App() {
 
         <label>
           <input class="input" type="email" value={email} placeholder="Your Email" required={true} onChange={(e) => setEmail(e.target.value)} />
-          <br/>
-          {dupEmail? <span >This email is already registered</span>: null}
-          
+          <br />
+          {dupEmail ? <span style={{color:'red'}}>This email is already registered</span> : null}
+
         </label>
 
         <label>
           <input class="input" type="number" value={phoneNumber} placeholder="Your phone number" required={true} onChange={(e) => setPhoneNumber(e.target.value)} />
-          <br/>
-          {dupNumber? <span >This number is already registered</span>: null}
+          <br />
+          {dupNumber ? <span style={{color:'red'}}>This number is already registered</span> : null}
         </label>
 
         <label>
@@ -170,12 +160,14 @@ function App() {
           <input class="input" type="text" value={referral} placeholder="Any Referral?" onChange={(e) => setReferral(e.target.value)} />
         </label>
 
-        <button className="submit" disabled={loading}>
+        <button className="submit" disabled={dupEmail || dupNumber || loading}>
           {loading ? 'Loading...' : `Pay now ₹${amount}`}
         </button>
       </form>
     </div>
   );
+
+
 }
 
 export default App;
