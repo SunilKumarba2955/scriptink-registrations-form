@@ -1,38 +1,145 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
 .App {
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.heading {
+  font-size: 25px;
+  padding: 3%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.form {
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  /* max-width: 350px; */
+  width: 25%;
+  padding: 20px;
+  border-radius: 20px;
+  position: relative;
+  background-color: #1a1a1a;
+  color: #fff;
+  border: 10px solid #333;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  position: relative;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding-left: 30px;
+  color: #00bfff;
 }
 
-.App-link {
-  color: #61dafb;
+.title::before {
+  width: 18px;
+  height: 18px;
 }
 
-@keyframes App-logo-spin {
+.title::after {
+  width: 18px;
+  height: 18px;
+  animation: pulse 1s linear infinite;
+}
+
+.title::before,
+.title::after {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  left: 0px;
+  background-color: #00bfff;
+}
+
+.message {
+  font-size: 14.5px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.flex {
+  display: flex;
+  width: 100%;
+  gap: 6px;
+}
+
+.form label {
+  position: relative;
+  width: 100%;
+}
+
+.form .input {
+  background-color: #333;
+  color: #fff;
+  width: 90%;
+  /* padding: 20px 05px 05px 10px; */
+  padding: 4%;
+  outline: 0;
+  border: 1px solid rgba(105, 105, 105, 0.397);
+  border-radius: 10px;
+}
+
+.form label .input + span {
+  color: rgba(255, 255, 255, 0.5);
+  position: absolute;
+  /* left: 10px;
+  top: 0px; */
+  font-size: 0.9em;
+  cursor: text;
+  transition: 0.3s ease;
+}
+
+.form label .input:placeholder-shown + span {
+  top: 12.5px;
+  font-size: 0.9em;
+}
+
+.form label .input:focus + span,
+.form label .input:valid + span {
+  color: #00bfff;
+  /* top: 0px; */
+  font-size: 0.7em;
+  font-weight: 600;
+}
+
+.input {
+  font-size: medium;
+}
+
+.submit {
+  border: none;
+  outline: none;
+  padding: 10px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 16px;
+  transform: .3s ease;
+  background-color: #00bfff;
+}
+
+.submit:hover {
+  background-color: #00bfff96;
+}
+
+@keyframes pulse {
   from {
-    transform: rotate(0deg);
+    transform: scale(0.9);
+    opacity: 1;
   }
+
   to {
-    transform: rotate(360deg);
+    transform: scale(1.8);
+    opacity: 0;
   }
 }
